@@ -85,7 +85,8 @@
           <to uri="activemq:queue:LatLonSTUDevice"/>
         </when>
         <otherwise>
-          <log message="Generic Message" loggingLevel="INFO"/>
+          <log message="Specialized Unit" loggingLevel="INFO"/>
+          <to uri="activemq:queue:LatLonSpecializedDevice"/>
         </otherwise>
       </choice>
       <filter>

@@ -3,10 +3,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>bsm.prototype.database</groupId>
-  <artifactId>latlonRailMsgDecoded</artifactId>
+  <artifactId>latlonReceiveLMU</artifactId>
   <version>1.0</version>
   <packaging>bundle</packaging>
-  <name>LatLon Decoded Data</name>
+  <name>LatLon Receive LMU Msg</name>
   <properties>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -201,8 +201,8 @@
         </executions>
         <configuration>
           <instructions>
-            <Bundle-SymbolicName>latlonDecodedMsgs</Bundle-SymbolicName>
-            <Private-Package>bsm.prototype.database.latlonDecodedMsgs.*</Private-Package>
+            <Bundle-SymbolicName>latlonReceiveLMUMsgs</Bundle-SymbolicName>
+            <Private-Package>bsm.prototype.database.latlonReceiveLMUMsgs.*</Private-Package>
             <Import-Package>javax.sql,com.microsoft.sqlserver.jdbc,*</Import-Package>
             <DynamicImport-Package>*</DynamicImport-Package>
           </instructions>
