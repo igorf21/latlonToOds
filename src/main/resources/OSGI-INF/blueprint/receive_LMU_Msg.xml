@@ -58,11 +58,23 @@
   
   <camelContext trace="false" xmlns="http://camel.apache.org/schema/blueprint">
   <propertyPlaceholder location="classpath:sql.properties" id="properties"/>
-  <route id= "LatLonAMQToDb">
+  <route id="LatLon LMU_Message AMQToDb">
     <from uri="activemqOut:queue:LatLonLMUDevice"/>
-    <log message="${body[MESSAGE_TYPE_ID]}" loggingLevel="INFO"/>
-    <log message="${body}" loggingLevel="INFO"/>
-    <to uri="sqlTgt:{{sql.insertLMU}}"/>
+    <log message="Inserting LMU for Id: ${body[MESSAGE_TYPE_ID]}" loggingLevel="INFO"/>
+    <to uri="sqlTgt:{{sql.insertLMU}}" id="Insert LMU Data"/>
+    <to uri="sqlTgt:{{sql.insertReport}}" id="Insert Common Data"/>
+    <multicast id="Store Optional Data">
+      <filter id="Check For Impact Data">
+        <simple>${body[IMPACT_MSG_ID]} != null</simple>
+        <log message="Inserting for Impact Id: ${body[IMPACT_MSG_ID]}" loggingLevel="INFO"/>
+        <to uri="sqlTgt:{{sql.insertImpact}}" id="Insert Impact Data"/>
+      </filter>
+      <filter id="Check For Unit Health Data">
+        <simple>${body[UNIT_HEALTH_ID]} != null</simple>
+        <log message="Inserting for UNIT HEALTH Id: ${body[UNIT_HEALTH_ID]}" loggingLevel="INFO"/>
+        <to uri="sqlTgt:{{sql.insertUnitHealth}}" id="Insert Unit Health Data"/>
+      </filter>
+    </multicast>
   </route>
 </camelContext>
 
