@@ -1,26 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+ 	   xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
        xmlns:camel="http://camel.apache.org/schema/blueprint"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
+<cm:property-placeholder id="placeholder" persistent-id="latlon.database.getmsg">
+    <cm:default-properties>
+      <cm:property name="amq.username" value="admin"/>
+      <cm:property name="amq.password" value="admin"/>
+      <cm:property name="amq.url" value="discovery:(fabric:latlon)"/>
+      <cm:property name="db.username" value="devsa"/>
+      <cm:property name="db.password" value="Magma1"/>
+      <cm:property name="db.url" value="jdbc:sqlserver://10.10.110.103\dev;databaseName=BSM_LATLON"/>
+    </cm:default-properties>
+  </cm:property-placeholder>
   
 <!--*************** this is the JDBC data sources for development test ******************************************************-->
- <!--
+
 <bean id="BSM-db" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
   <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
-  <property name="url" value="jdbc:sqlserver://localhost;databaseName=BSM_LATLON"/>
-  <property name="username" value="sa"/>
-  <property name="password" value="September00"/>
+   <property name="url" value="${db.url}"/>
+  <property name="username" value="${db.username}"/>
+  <property name="password" value="${db.password}"/>
 </bean>
- -->
+
 <!--*****************************************************************************************************************-->
 
   
 <!-- Imported OSGi services includes the Transaction manager and JDBC DataSource -->
+ <!--
 <reference id="BSM-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=SQL_Tgt_LL)"/> 
-
+ -->
 
 <bean id="sqlTgt" class="org.apache.camel.component.sql.SqlComponent">
   <property name="dataSource" ref="BSM-db"/>
@@ -28,38 +40,27 @@
 
 
 <!--*************** this is the JMS data source for AMQ *******************************************************-->
-<!--
+
 <bean id="jmsConnectionFactory" 
    class="org.apache.activemq.ActiveMQConnectionFactory">
-   <property name="brokerURL" value="tcp://localhost:61616" />
-   <property name="userName" value="admin" />
-   <property name="password" value="admin" />
+   <property name="brokerURL" value="${amq.url}"/>
+   <property name="userName" value="${amq.username}" />
+   <property name="password" value="${amq.password}" />
 </bean>
  
 <bean id="pooledConnectionFactory" 
    class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
    <property name="maxConnections" value="8" />
-   <property name="connectionFactory" ref="jmsConnectionFactoryOut" />
+   <property name="connectionFactory" ref="jmsConnectionFactory" />
 </bean>
  
-<bean id="jmsConfig" 
-   class="org.apache.camel.component.jms.JmsConfiguration">
-   <property name="connectionFactory" ref="pooledConnectionFactory"/>
-   <property name="concurrentConsumers" value="10"/>
-</bean>
- 
-<bean id="activemq" 
-    class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="configuration" ref="jmsConfig"/>
-</bean>
- 
+
+<!-- 
 <reference id="pooledConnectionFactory" interface="javax.jms.ConnectionFactory" availability="mandatory" filter="(name=AMQBR)"/> 
 -->  
 <bean id="activemq" 
     class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="connectionFactory">
-            <reference interface="javax.jms.ConnectionFactory" availability="mandatory" filter="name=AMQBR"/>
-    </property>
+    <property name="connectionFactory" ref="pooledConnectionFactory"/>
 </bean>   
   
   

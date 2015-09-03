@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>bsm.prototype.database</groupId>
   <artifactId>latlonReceiveLMU</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
   <packaging>bundle</packaging>
   <name>LatLon Receive LMU Msg</name>
   <properties>
