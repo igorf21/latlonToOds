@@ -6,20 +6,20 @@
        http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
   
-  <!--*************** this is the JDBC data sources for development test ******************************************************-->
- 
-
-
+<!--*************** this is the JDBC data sources for development test ******************************************************-->
+ <!--
 <bean id="BSM-db" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
   <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
   <property name="url" value="jdbc:sqlserver://localhost;databaseName=BSM_LATLON"/>
   <property name="username" value="sa"/>
   <property name="password" value="September00"/>
 </bean>
-
-<!--*************** this is the JDBC data source for development test *******************************************************-->
+ -->
+<!--*****************************************************************************************************************-->
 
   
+<!-- Imported OSGi services includes the Transaction manager and JDBC DataSource -->
+<reference id="BSM-db" interface="javax.sql.DataSource" availability="mandatory" filter="(datasource.name=SQL_Tgt_LL)"/> 
 
 
 <bean id="sqlTgt" class="org.apache.camel.component.sql.SqlComponent">
@@ -28,38 +28,45 @@
 
 
 <!--*************** this is the JMS data source for AMQ *******************************************************-->
-
-<bean id="jmsConnectionFactoryOut" 
+<!--
+<bean id="jmsConnectionFactory" 
    class="org.apache.activemq.ActiveMQConnectionFactory">
    <property name="brokerURL" value="tcp://localhost:61616" />
    <property name="userName" value="admin" />
    <property name="password" value="admin" />
 </bean>
  
-<bean id="pooledConnectionFactoryOut" 
+<bean id="pooledConnectionFactory" 
    class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
    <property name="maxConnections" value="8" />
    <property name="connectionFactory" ref="jmsConnectionFactoryOut" />
 </bean>
  
-<bean id="jmsConfigOut" 
+<bean id="jmsConfig" 
    class="org.apache.camel.component.jms.JmsConfiguration">
-   <property name="connectionFactory" ref="pooledConnectionFactoryOut"/>
+   <property name="connectionFactory" ref="pooledConnectionFactory"/>
    <property name="concurrentConsumers" value="10"/>
 </bean>
  
-<bean id="activemqOut" 
+<bean id="activemq" 
     class="org.apache.activemq.camel.component.ActiveMQComponent">
-    <property name="configuration" ref="jmsConfigOut"/>
+    <property name="configuration" ref="jmsConfig"/>
 </bean>
-  
-  
+ 
+<reference id="pooledConnectionFactory" interface="javax.jms.ConnectionFactory" availability="mandatory" filter="(name=AMQBR)"/> 
+-->  
+<bean id="activemq" 
+    class="org.apache.activemq.camel.component.ActiveMQComponent">
+    <property name="connectionFactory">
+            <reference interface="javax.jms.ConnectionFactory" availability="mandatory" filter="name=AMQBR"/>
+    </property>
+</bean>   
   
   
   <camelContext trace="false" xmlns="http://camel.apache.org/schema/blueprint">
   <propertyPlaceholder location="classpath:sql.properties" id="properties"/>
   <route id="LatLon LMU_Message AMQToDb">
-    <from uri="activemqOut:queue:LatLonLMUDevice"/>
+    <from uri="activemq:queue:LatLonLMUDevice"/>
     <log message="Inserting LMU for Id: ${body[MESSAGE_TYPE_ID]}" loggingLevel="INFO"/>
     <to uri="sqlTgt:{{sql.insertLMU}}" id="Insert LMU Data"/>
     <to uri="sqlTgt:{{sql.insertReport}}" id="Insert Common Data"/>
