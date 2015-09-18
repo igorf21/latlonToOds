@@ -49,7 +49,7 @@
 </bean>
  
 <bean id="pooledConnectionFactory" 
-   class="org.apache.activemq.pool.PooledConnectionFactory" init-method="start" destroy-method="stop">
+   class="org.apache.activemq.pool.PooledConnectionFactory">
    <property name="maxConnections" value="8" />
    <property name="connectionFactory" ref="jmsConnectionFactory" />
 </bean>

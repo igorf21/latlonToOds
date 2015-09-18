@@ -7,6 +7,13 @@
   <version>1.1</version>
   <packaging>bundle</packaging>
   <name>LatLon Receive LMU Msg</name>
+  <distributionManagement>
+    <repository>
+      <id>BSM-Wireless</id>
+      <name>ESB-Repository</name>
+      <url>scp://10.10.110.126/root/maven-repo/repository</url>
+    </repository>
+  </distributionManagement>
   <properties>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -74,6 +81,12 @@
       <artifactId>camel-jms</artifactId>
       <version>2.15.1.redhat-620133</version>
     </dependency>
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-test</artifactId>
+      <version>2.15.1.redhat-620133</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
@@ -124,6 +137,13 @@
     </pluginRepository>
   </pluginRepositories>
   <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>2.9</version>
+      </extension>
+    </extensions>
     <defaultGoal>install</defaultGoal>
     <pluginManagement>
       <plugins>
@@ -217,20 +237,5 @@
         </configuration>
       </plugin>
     </plugins>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>2.9</version>
-      </extension>
-    </extensions>
   </build>
-  <distributionManagement>
-    <repository>
-      <id>BSM-Wireless</id>
-      <name>ESB-Repository</name>
-      <layout>default</layout>
-      <url>scp://10.10.110.126/root/maven-repo/repository</url>
-    </repository>
-  </distributionManagement>
 </project>
