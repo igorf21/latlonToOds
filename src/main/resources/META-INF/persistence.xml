@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="1.0"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+
+  <persistence-unit name="devicedata" transaction-type="RESOURCE_LOCAL">
+	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+	<class>ods.model.MessageLatLon</class>
+    <properties>
+     <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+      <property name="hibernate.connection.url" value="jdbc:sqlserver://10.10.110.103\dev;databaseName=BSM_LATLON"/>
+      <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="hibernate.connection.username" value="devsa"/>
+      <property name="hibernate.connection.password" value="Magma1"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="create"/>  
+    </properties>
+  </persistence-unit>
+  
+  <persistence-unit name="devicedataTgt" transaction-type="RESOURCE_LOCAL">
+	<provider>org.hibernate.ejb.HibernatePersistence</provider>
+	<class>model.SiteData</class>
+	<class>model.DeliveryEntity</class>
+	<class>model.InventoryEntity</class>
+    <properties>
+     <property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect"/>
+      <property name="hibernate.connection.url" value="jdbc:sqlserver://localhost;databaseName=BSM_JMM"/>
+      <property name="hibernate.connection.driver_class" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+      <property name="hibernate.connection.username" value="sa"/>
+      <property name="hibernate.connection.password" value="September00"/>
+      <property name="hibernate.format_sql" value="true"/>
+      <property name="hibernate.hbm2ddl.auto" value="create"/>     
+    </properties>
+  </persistence-unit>
+
+</persistence>
+        

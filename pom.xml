@@ -1,196 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
   <modelVersion>4.0.0</modelVersion>
-  <groupId>bsm.prototype.database</groupId>
-  <artifactId>latlonReceiveLMU</artifactId>
-  <version>1.1</version>
+
+  <groupId>latlon.database.devicedata</groupId>
+  <artifactId>latlonToOds</artifactId>
   <packaging>bundle</packaging>
-  <name>LatLon Receive LMU Msg</name>
-  <distributionManagement>
-    <repository>
-      <id>BSM-Wireless</id>
-      <name>ESB-Repository</name>
-      <url>scp://10.10.110.126/root/maven-repo/repository</url>
-    </repository>
-  </distributionManagement>
+  <version>1.0</version>
+
+  <name>A Camel Blueprint Route</name>
+  <url>http://www.myorganization.org</url>
+
   <properties>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <osgi.meta.persistence>META-INF/persistence.xml</osgi.meta.persistence>
   </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>bsm.dcl.config</groupId>
+      <artifactId>dal</artifactId>
+      <version>1.0</version>
+    </dependency>
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
       <version>2.15.1.redhat-620133</version>
     </dependency>
     <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-jackson</artifactId>
+    	<version>2.15.1.redhat-620133</version>
+	</dependency>
+    <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-blueprint</artifactId>
       <version>2.15.1.redhat-620133</version>
     </dependency>
+     <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-jpa</artifactId>
+    	<version>2.15.1.redhat-620133</version>
+    </dependency>   
     <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jaxb</artifactId>
-      <version>2.15.1.redhat-620133</version>
+      	<groupId>org.apache.activemq</groupId>
+      	<artifactId>activemq-camel</artifactId>
+      	<version>5.11.0.redhat-620133</version>
     </dependency>
+    <dependency>
+      	<groupId>org.hibernate</groupId>
+      	<artifactId>hibernate-entitymanager</artifactId>
+      	<version>4.2.19.Final-redhat-1</version>
+    </dependency>
+	<dependency>
+  		<groupId>org.hibernate</groupId>
+  		<artifactId>hibernate-core</artifactId>
+  		<version>4.2.19.Final-redhat-1</version>
+	</dependency>
+    <dependency>
+    	<groupId>com.microsoft.sqlserver</groupId>
+  		<artifactId>sqljdbc4</artifactId>
+  		<version>4.0</version>
+    </dependency>
+
+    <!-- logging -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.10</version>
+      <version>1.7.7</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.10</version>
+      <version>1.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.7</version>
     </dependency>
     <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
     </dependency>
-    <dependency>
-      <groupId>com.microsoft.sqlserver</groupId>
-      <artifactId>sqljdbc4</artifactId>
-      <version>4.0</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>commons-dbcp</groupId>
-      <artifactId>commons-dbcp</artifactId>
-      <version>1.4</version>
-      <scope>provided</scope>
-    </dependency>
+
+    <!-- testing -->
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-test-blueprint</artifactId>
-      <version>2.15.1.redhat-620133</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-sql</artifactId>
-      <version>2.15.1.redhat-620133</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.activemq</groupId>
-      <artifactId>activemq-camel</artifactId>
-      <version>5.11.0.redhat-620133</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-jms</artifactId>
-      <version>2.15.1.redhat-620133</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.camel</groupId>
-      <artifactId>camel-test</artifactId>
-      <version>2.15.1.redhat-620133</version>
+      <version>2.14.1-redhat-01</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>release.fusesource.org</id>
-      <name>FuseSource Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
-    </repository>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>ea.fusesource.org</id>
-      <name>FuseSource Community Early Access Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
-    </repository>
-  </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>release.fusesource.org</id>
-      <name>FuseSource Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/repositories/releases</url>
-    </pluginRepository>
-    <pluginRepository>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-      <id>ea.fusesource.org</id>
-      <name>FuseSource Community Early Access Release Repository</name>
-      <url>http://repo.fusesource.com/nexus/content/groups/ea</url>
-    </pluginRepository>
-  </pluginRepositories>
+
   <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>2.9</version>
-      </extension>
-    </extensions>
     <defaultGoal>install</defaultGoal>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <versionRange>[2.3.7,)</versionRange>
-                    <goals>
-                      <goal>manifest</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore></ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-    <plugins>
+    <resources>
+		<resource>
+			<directory>src/main/resources</directory>
+			<filtering>true</filtering>
+		</resource>
+	</resources>
+
+    <plugins>   
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>jaxb2-maven-plugin</artifactId>
-        <version>1.6</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>xjc</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <schemaDirectory>src/main/resources/schemas</schemaDirectory>
-          <verbose>false</verbose>
-        </configuration>
-      </plugin>
-      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.5.1</version>
         <configuration>
@@ -199,43 +117,45 @@
         </configuration>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
         <version>2.6</version>
         <configuration>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
+
+      <!-- to generate the MANIFEST-FILE of the bundle -->
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
         <version>2.3.7</version>
         <extensions>true</extensions>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
         <configuration>
           <instructions>
-            <Bundle-SymbolicName>latlonReceiveLMUMsgs</Bundle-SymbolicName>
-            <Private-Package>bsm.prototype.database.latlonReceiveLMUMsgs.*</Private-Package>
-            <Import-Package>javax.sql,com.microsoft.sqlserver.jdbc,*</Import-Package>
-            <DynamicImport-Package>*</DynamicImport-Package>
+            <Bundle-SymbolicName>datapull</Bundle-SymbolicName>
+            <Private-Package>jmm.database.devicedata.datapull.*</Private-Package>      
+            <Meta-Persistence>META-INF/persistence.xml</Meta-Persistence>
+            <Import-Package>org.hibernate.proxy,
+            javassist.util.proxy,
+            javax.persistence*,
+            bsm.dcl.config.dal,
+            javax.sql,com.microsoft.sqlserver.jdbc,*
+            </Import-Package>             
           </instructions>
         </configuration>
       </plugin>
+
+       <!-- to run using mvn camel:run -->
       <plugin>
         <groupId>org.apache.camel</groupId>
         <artifactId>camel-maven-plugin</artifactId>
-        <version>2.15.1.redhat-620133</version>
+        <version>2.14.1-redhat-01</version>
         <configuration>
           <useBlueprint>true</useBlueprint>
         </configuration>
       </plugin>
+
     </plugins>
   </build>
 </project>
